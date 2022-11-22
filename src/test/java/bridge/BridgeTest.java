@@ -35,5 +35,10 @@ public class BridgeTest {
         String sectionInfo = bridgeGame.getBridge().get(0);
         if (sectionInfo.equals("U")) Assertions.assertTrue(isMoveOrFail);
         if (sectionInfo.equals("D")) Assertions.assertFalse(isMoveOrFail);
+
+        isMoveOrFail = bridgeGame.move("D");
+        sectionInfo = bridgeGame.getBridge().get(1);
+        if (sectionInfo.equals("D")) Assertions.assertTrue(isMoveOrFail);
+        if (sectionInfo.equals("U")) Assertions.assertFalse(isMoveOrFail);
     }
 }
