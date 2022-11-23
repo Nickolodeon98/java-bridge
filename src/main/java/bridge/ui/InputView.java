@@ -1,5 +1,6 @@
-package bridge;
+package bridge.ui;
 
+import bridge.domain.Error;
 import camp.nextstep.edu.missionutils.Console;
 
 /**
@@ -7,12 +8,22 @@ import camp.nextstep.edu.missionutils.Console;
  */
 public class InputView {
 
+    private void errorHandling(String input, ErrorType errorType) {
+        if (errorType.condition(input)) {
+            System.out.println(Error.ERROR.getValue() + " " + errorType.errorType().getValue());
+            throw new IllegalArgumentException();
+        }
+    }
+
     /**
      * 다리의 길이를 입력받는다.
      */
     public int readBridgeSize() {
         System.out.println("다리의 길이를 입력해주세요.");
-        return Integer.parseInt(Console.readLine());
+        String size = Console.readLine();
+        errorHandling(size, new NumericError());
+        errorHandling(size, new RangeError());
+        return Integer.parseInt(size);
     }
 
     /**
@@ -20,7 +31,9 @@ public class InputView {
      */
     public String readMoving() {
         System.out.println("이동할 칸을 선택해주세요. (위: U, 아래: D)");
-        return Console.readLine();
+        String option = Console.readLine();
+        errorHandling(option, new OptionError());
+        return option;
     }
 
     /**
@@ -28,6 +41,8 @@ public class InputView {
      */
     public String readGameCommand() {
         System.out.println("게임을 다시 시도할지 여부를 입력해주세요. (재시도: R, 종료: Q)");
-        return Console.readLine();
+        String option = Console.readLine();
+        errorHandling(option, new EndingError());
+        return option;
     }
 }
