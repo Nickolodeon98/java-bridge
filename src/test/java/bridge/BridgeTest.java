@@ -13,10 +13,15 @@ import java.util.regex.Pattern;
 public class BridgeTest {
 
     BridgeGame bridgeGame;
-
+    OutputView outputView;
+    String[] bridge;
     @BeforeEach
     void setUp() {
         this.bridgeGame = new BridgeGame(4);
+        List<String> bridgeShape = new ArrayList<>(Arrays.asList("U", "D", "D", "D"));
+        BridgeGame bridgeGame1 = new BridgeGame(bridgeShape);
+        this.outputView = new OutputView(bridgeGame1);
+        this.bridge = new String[]{"O", "O", "O", "X"};
     }
 
     @Test
@@ -35,20 +40,29 @@ public class BridgeTest {
     void moveOrFall() {
         System.out.println(bridgeGame.getBridge());
         String sectionInfo = bridgeGame.getBridge().get(0);
-        String[] bridge = bridgeGame.move("U");
-        System.out.println(Arrays.toString(bridge));
-        if (sectionInfo.equals("U")) Assertions.assertEquals("O", bridge[0]);
-        if (sectionInfo.equals("D")) Assertions.assertEquals("X", bridge[0]);
+        boolean moveOrFall = bridgeGame.move("U");
+        System.out.println(Arrays.toString(bridgeGame.getFeasibility()));
+        if (sectionInfo.equals("U")) Assertions.assertEquals("O", bridgeGame.getFeasibility()[0]);
+        if (sectionInfo.equals("D")) Assertions.assertEquals("X", bridgeGame.getFeasibility()[0]);
     }
 
     @Test
     @DisplayName("다리의 모양을 출력한다.")
     void printBridge() {
-        List<String> bridgeShape = new ArrayList<>(Arrays.asList("U", "D", "D", "D"));
-        BridgeGame bridgeGame1 = new BridgeGame(bridgeShape);
-        OutputView outputView = new OutputView(bridgeGame1);
-        String[] bridge = {"O", "O", "O", "X"};
         String bridgeState = String.format("[ O |   |   |   ]\n[   | O | O | X ]");
         Assertions.assertEquals(bridgeState, outputView.printMap(bridge));
+    }
+
+    @Test
+    @DisplayName("최종 게임 결과를 출력한다.")
+    void printTheEnd() {
+        String expectedEnd = String.format("최종 게임 결과\n" +
+                "[ O |   |   |   ]\n[   | O | O | X ]" +
+                "\n\n" +
+                "게임 성공 여부: 실패\n" +
+                "총 시도한 횟수: 1\n");
+        String actualEnd = outputView.printResult(bridge, false, 1);
+        System.out.println(actualEnd);
+        Assertions.assertEquals(expectedEnd, actualEnd);
     }
 }
