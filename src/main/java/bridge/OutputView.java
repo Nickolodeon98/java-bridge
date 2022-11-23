@@ -28,28 +28,20 @@ public class OutputView {
         map = String.join("", map, "\n");
         map = String.join("", map, drawBridge(pathInfo, () -> "D"));
         return map;
-//        System.out.println();
-//        drawBridge(pathInfo, () -> "D");
     }
 
     private String drawBridge(String[] pathInfo, SetUpOrDown setUpOrDown) {
         String completeBridge = "";
-//        System.out.print("[ ");
         completeBridge = String.join("", "[ ", completeBridge);
         for (int i = 0; i < bridgeGame.getPointer(); i++) {
             completeBridge = String.join("", completeBridge, formatBridge(pathInfo[i], setUpOrDown.set(), i));
-//            System.out.print(formatBridge(pathInfo[i], setUpOrDown.set(), i));
-//            System.out.println(completeBridge);
         }
         completeBridge = String.join("", completeBridge, " ]");
-//        System.out.print(" ]");
-//        System.out.println(completeBridge);
         return completeBridge;
     }
 
     private String formatBridge(String bridgeState, String position, int location) {
         String step = " ";
-
         if (bridgeGame.getBridge().get(location).equals(position))
             step = bridgeState;
         if (location != bridgeGame.getPointer() - 1)
@@ -63,6 +55,16 @@ public class OutputView {
      * <p>
      * 출력을 위해 필요한 메서드의 인자(parameter)는 자유롭게 추가하거나 변경할 수 있다.
      */
-    public void printResult() {
+    public void printResult(String[] pathInfo, boolean passOrFail, int tryouts) {
+        System.out.println("최종 게임 결과");
+        System.out.println(printMap(pathInfo));
+        System.out.println();
+        System.out.println("게임 성공 여부: " + resultInKorean(passOrFail));
+        System.out.println("총 시도한 횟수: " + tryouts);
+    }
+
+    private String resultInKorean(boolean passOrFail) {
+        if (passOrFail) return "성공";
+        return "실패";
     }
 }
